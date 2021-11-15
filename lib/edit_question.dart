@@ -1,12 +1,6 @@
-
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:tp_flutter_jaugey_nohan/list_quiz.dart';
-import 'package:tp_flutter_jaugey_nohan/jeu.dart';
-import 'package:tp_flutter_jaugey_nohan/select.dart';
 
-import 'Model/Question.dart';
+import 'Model/question.dart';
 
 class EditQuestion extends StatelessWidget{
   var title;

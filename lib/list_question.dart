@@ -1,13 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:tp_flutter_jaugey_nohan/Model/Quiz.dart';
+import 'package:tp_flutter_jaugey_nohan/Model/quiz.dart';
 import 'package:tp_flutter_jaugey_nohan/edit_question.dart';
-import 'package:tp_flutter_jaugey_nohan/resultat.dart';
-
-import 'Model/Question.dart';
-import 'Model/Reponse.dart';
-import 'jeu.dart';
 
 class ListQuestion extends StatefulWidget {
   ListQuestion({Key? key, required this.title, required this.quiz}) : super(key: key);

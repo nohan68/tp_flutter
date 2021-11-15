@@ -1,16 +1,18 @@
 
-import 'Quiz.dart';
-import 'Reponse.dart';
+
+import 'package:tp_flutter_jaugey_nohan/Model/quiz.dart';
+import 'package:tp_flutter_jaugey_nohan/Model/reponse.dart';
 
 class Question{
    static int questionActuelle = 0;
 
-   List<Reponse> reponses = <Reponse>[];
+   List<Reponse> reponses;
    String question;
 
-   Question(this.question);
 
-   Reponse getBonneReponse(){
+   Question(this.question,this.reponses);
+
+  Reponse getBonneReponse(){
       for(Reponse r in this.reponses){
          if(r.veracite)
             return r;
