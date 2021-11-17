@@ -10,6 +10,12 @@ class Quiz{
   static List<Quiz> quizzes = <Quiz>[];
   static QuizzDBHelper quizzDBHelper=QuizzDBHelper.instance;
   List<Question> questions = <Question>[];
+  int idQuizz=-1;
+  String nomQuizz="";
+
+  Quiz.empty();
+
+  Quiz(this.idQuizz, this.nomQuizz);
 
   static init() async{
     quizzes = await quizzDBHelper.getQuizzs();

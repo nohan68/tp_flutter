@@ -23,7 +23,7 @@ const String colonneQuesion_reponse ='qu_reponse';
 const String colonneQuesion_quizz ='qu_quizz';
 const String colonneQuesion_index ='qu_index';
 
-const String tableReponses = 're_reponses';
+const String tableReponses = 'reponses';
 const String colonneReponse_Question ='re_question';
 const String colonneReponse_Reponse ='re_reponse';
 const String colonneReponse_Index = 're_index';
@@ -122,16 +122,18 @@ class QuizzDBHelper {
   Future<Quiz> getQuizz(int id) async{
     Database? db = await instance.db ;
     List<Map>? maps = await db?.rawQuery ('SELECT $tableQuizz.$colonneQuizz_Name, $tableQuestions.$colonneQuestion_ID,$tableQuestions.$colonneQuesion_reponse,$tableQuestions.$colonneQuestion_question,$tableReponses.$colonneReponse_Reponse,$tableReponses.$colonneReponse_Index FROM $tableQuestions LEFT OUTER JOIN $tableQuizz ON $tableQuestions.$colonneQuesion_quizz=$tableQuizz.$colonneQuizz_ID LEFT OUTER JOIN $tableReponses ON $tableQuestions.$colonneQuestion_ID=$tableReponses.$colonneReponse_Question ORDER BY $tableQuestions.$colonneQuesion_index,$tableReponses.$colonneReponse_Index');
-    Quiz res = Quiz();
+    Quiz res = Quiz.empty();
     if (maps != null) {
       if (maps.isNotEmpty) {
         List<Reponse> tmp=[];
         int lastQuestionid = maps[0][colonneQuestion_ID];
         int lastReponse = maps[0][colonneQuesion_reponse];
         String lastQuestion = maps[0][colonneQuestion_question];
+        res.nomQuizz=maps[0][colonneQuizz_ID];
+        res.idQuizz=id;
         for (Map map in maps) {
           if(lastQuestionid!=map[colonneQuestion_ID]){
-            res.questions.add(Question(lastQuestion,tmp));
+            res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
             lastQuestionid = map[colonneQuestion_ID];
             lastReponse = map[colonneQuesion_reponse];
             lastQuestion = map[colonneQuestion_question];
@@ -139,7 +141,7 @@ class QuizzDBHelper {
           }
           tmp.add(Reponse(map[colonneReponse_Reponse],lastReponse==map[colonneReponse_Index]));
         }
-        res.questions.add(Question(lastQuestion,tmp));
+        res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
       }
     }
     return res;
@@ -159,6 +161,38 @@ class QuizzDBHelper {
       }
     }
     return res;
+  }
+
+  void changeIndexQuestion(int idQuestion,int index,int newIndex) async{
+    Database? db = await instance.db ;
+
+    List<Map>? maps = await db?.query (tableQuestions,
+        columns: [colonneQuesion_quizz],
+        where: '$colonneQuestion_ID = ?', whereArgs: [idQuestion]);
+    if(maps!=null){
+      if(maps.isNotEmpty){
+        int idQuizz = maps[0][colonneQuesion_quizz];
+
+        if(index >newIndex){
+          await db?.rawUpdate('''UPDATE `questions` SET $colonneQuesion_index=$colonneQuesion_index+1 WHERE $colonneQuesion_quizz=$idQuizz AND $colonneQuesion_index<$index AND $colonneQuesion_index >=$newIndex; 
+                                UPDATE `questions` SET $colonneQuesion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion
+                              ''');
+        }else{
+          await db?.rawUpdate('''UPDATE `questions` SET $colonneQuesion_index=$colonneQuesion_index-1 WHERE $colonneQuesion_quizz=$idQuizz AND $colonneQuesion_index >$index AND $colonneQuesion_index <=$newIndex; 
+                                  UPDATE `questions` SET $colonneQuesion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion
+                                  ''');
+        }
+      }
+    }
+
+    void changeQuestion(int idQuestion,String text) async{
+      Database? db = await instance.db ;
+      await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_question=$text WHERE $colonneQuestion_ID=$idQuestion''');
+    }
+
+
+
+    
   }
 
 }

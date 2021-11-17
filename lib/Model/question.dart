@@ -8,9 +8,10 @@ class Question{
 
    List<Reponse> reponses;
    String question;
+   int idQuestion;
 
 
-   Question(this.question,this.reponses);
+   Question(this.question,this.reponses,this.idQuestion);
 
   Reponse getBonneReponse(){
       for(Reponse r in this.reponses){
