@@ -5,4 +5,8 @@ class Reponse{
 
 
   Reponse(this.libelle, this.veracite);
+
+  void setVeracite(bool? b) {
+    this.veracite = b!;
+  }
 }
