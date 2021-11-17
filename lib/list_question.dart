@@ -23,16 +23,17 @@ class ListQuestion extends StatefulWidget {
 
   @override
   State<ListQuestion> createState() => _SelectState();
-}
+suite
 
 class _SelectState extends State<ListQuestion> {
 
-  void select(int i){
+  void select(int i) async{
     Quiz.quizActuel = i;
-    Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>  EditQuestion(title: "", question: widget.quiz.getQuestion(i)))
     );
+    //TODO mettre setstate avec quizz update
   }
 
 
@@ -45,7 +46,7 @@ class _SelectState extends State<ListQuestion> {
       ),
       body: ListView.builder(
         // Let the ListView know how many items it needs to build.
-        itemCount: Quiz.quizzes.length,
+        itemCount: widget.quiz.questions.length,
         // Provide a builder function. This is where the magic happens.
         // Convert each item into a widget based on the type of item it is.
         itemBuilder: (context, index) {

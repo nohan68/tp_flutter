@@ -19,9 +19,9 @@ const String colonneQuizz_ID = 'qz_id';
 const String tableQuestions = 'questions';
 const String colonneQuestion_question='qu_question';
 const String colonneQuestion_ID = 'qu_id';
-const String colonneQuesion_reponse ='qu_reponse';
-const String colonneQuesion_quizz ='qu_quizz';
-const String colonneQuesion_index ='qu_index';
+const String colonneQuestion_reponse ='qu_reponse';
+const String colonneQuestion_quizz ='qu_quizz';
+const String colonneQuestion_index ='qu_index';
 
 const String tableReponses = 'reponses';
 const String colonneReponse_Question ='re_question';
@@ -61,10 +61,10 @@ class QuizzDBHelper {
     await db.execute('''
       create table $tableQuestions (
       $colonneQuestion_ID integer primary key autoincrement,
-      $colonneQuesion_quizz integer,
+      $colonneQuestion_quizz integer,
       $colonneQuestion_question text,
-      $colonneQuesion_reponse integer,
-      $colonneQuesion_index integer )
+      $colonneQuestion_reponse integer,
+      $colonneQuestion_index integer )
       '''
     );
     print('''
@@ -92,27 +92,27 @@ class QuizzDBHelper {
       colonneQuizz_ID:1
     });
 
-    int res =await db.insert(tableQuestions,{colonneQuestion_question:"Le diable de Tasmanie vit dans la jungle du Brésil.",colonneQuesion_quizz:1,colonneQuesion_index:1,colonneQuesion_reponse:2});
+    int res =await db.insert(tableQuestions,{colonneQuestion_question:"Le diable de Tasmanie vit dans la jungle du Brésil.",colonneQuestion_quizz:1,colonneQuestion_index:1,colonneQuestion_reponse:2});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Vrai",colonneReponse_Question:res,colonneReponse_Index:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Faux",colonneReponse_Question:res,colonneReponse_Index:2});
 
-    res =await db.insert(tableQuestions,{colonneQuestion_question:"La sauterelle saute l'équivalent de 200 fois sa taille.",colonneQuesion_quizz:1,colonneQuesion_index:2,colonneQuesion_reponse:1});
+    res =await db.insert(tableQuestions,{colonneQuestion_question:"La sauterelle saute l'équivalent de 200 fois sa taille.",colonneQuestion_quizz:1,colonneQuestion_index:2,colonneQuestion_reponse:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Vrai",colonneReponse_Question:res,colonneReponse_Index:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Faux",colonneReponse_Question:res,colonneReponse_Index:2});
 
-    res =await db.insert(tableQuestions,{colonneQuestion_question:"Les pandas hibernent.",colonneQuesion_quizz:1,colonneQuesion_index:3,colonneQuesion_reponse:2});
+    res =await db.insert(tableQuestions,{colonneQuestion_question:"Les pandas hibernent.",colonneQuestion_quizz:1,colonneQuestion_index:3,colonneQuestion_reponse:2});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Vrai",colonneReponse_Question:res,colonneReponse_Index:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Faux",colonneReponse_Question:res,colonneReponse_Index:2});
 
-    res =await db.insert(tableQuestions,{colonneQuestion_question:"On trouve des dromadaires en liberté en Australie.",colonneQuesion_quizz:1,colonneQuesion_index:4,colonneQuesion_reponse:1});
+    res =await db.insert(tableQuestions,{colonneQuestion_question:"On trouve des dromadaires en liberté en Australie.",colonneQuestion_quizz:1,colonneQuestion_index:4,colonneQuestion_reponse:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Vrai",colonneReponse_Question:res,colonneReponse_Index:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Faux",colonneReponse_Question:res,colonneReponse_Index:2});
 
-    res =await db.insert(tableQuestions,{colonneQuestion_question:"Le papillon monarque vole plus de 4000 km.",colonneQuesion_quizz:1,colonneQuesion_index:5,colonneQuesion_reponse:1});
+    res =await db.insert(tableQuestions,{colonneQuestion_question:"Le papillon monarque vole plus de 4000 km.",colonneQuestion_quizz:1,colonneQuestion_index:5,colonneQuestion_reponse:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Vrai",colonneReponse_Question:res,colonneReponse_Index:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Faux",colonneReponse_Question:res,colonneReponse_Index:2});
 
-    res =await db.insert(tableQuestions,{colonneQuestion_question:"Les gorilles mâles dorment dans les arbres.",colonneQuesion_quizz:1,colonneQuesion_index:6,colonneQuesion_reponse:2});
+    res =await db.insert(tableQuestions,{colonneQuestion_question:"Les gorilles mâles dorment dans les arbres.",colonneQuestion_quizz:1,colonneQuestion_index:6,colonneQuestion_reponse:2});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Vrai",colonneReponse_Question:res,colonneReponse_Index:1});
     await db.insert(tableReponses,{colonneReponse_Reponse:"Faux",colonneReponse_Question:res,colonneReponse_Index:2});
 
@@ -122,13 +122,13 @@ class QuizzDBHelper {
 
   Future<Quiz> getQuizz(int id) async{
     Database? db = await instance.db ;
-    List<Map>? maps = await db?.rawQuery ('SELECT $tableQuizz.$colonneQuizz_Name, $tableQuestions.$colonneQuestion_ID,$tableQuestions.$colonneQuesion_reponse,$tableQuestions.$colonneQuestion_question,$tableReponses.$colonneReponse_Reponse,$tableReponses.$colonneReponse_Index FROM $tableQuestions LEFT OUTER JOIN $tableQuizz ON $tableQuestions.$colonneQuesion_quizz=$tableQuizz.$colonneQuizz_ID LEFT OUTER JOIN $tableReponses ON $tableQuestions.$colonneQuestion_ID=$tableReponses.$colonneReponse_Question ORDER BY $tableQuestions.$colonneQuesion_index,$tableReponses.$colonneReponse_Index');
+    List<Map>? maps = await db?.rawQuery ('SELECT $tableQuizz.$colonneQuizz_Name, $tableQuestions.$colonneQuestion_ID,$tableQuestions.$colonneQuestion_reponse,$tableQuestions.$colonneQuestion_question,$tableReponses.$colonneReponse_Reponse,$tableReponses.$colonneReponse_Index FROM $tableQuestions LEFT OUTER JOIN $tableQuizz ON $tableQuestions.$colonneQuestion_quizz=$tableQuizz.$colonneQuizz_ID LEFT OUTER JOIN $tableReponses ON $tableQuestions.$colonneQuestion_ID=$tableReponses.$colonneReponse_Question ORDER BY $tableQuestions.$colonneQuestion_index,$tableReponses.$colonneReponse_Index');
     Quiz res = Quiz.empty();
     if (maps != null) {
       if (maps.isNotEmpty) {
         List<Reponse> tmp=[];
         int lastQuestionid = maps[0][colonneQuestion_ID];
-        int lastReponse = maps[0][colonneQuesion_reponse];
+        int lastReponse = maps[0][colonneQuestion_reponse];
         String lastQuestion = maps[0][colonneQuestion_question];
         res.nomQuizz=maps[0][colonneQuizz_Name];
         res.idQuizz=id;
@@ -136,11 +136,11 @@ class QuizzDBHelper {
           if(lastQuestionid!=map[colonneQuestion_ID]){
             res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
             lastQuestionid = map[colonneQuestion_ID];
-            lastReponse = map[colonneQuesion_reponse];
+            lastReponse = map[colonneQuestion_reponse];
             lastQuestion = map[colonneQuestion_question];
             tmp =[];
           }
-          tmp.add(Reponse(map[colonneReponse_Reponse],lastReponse==map[colonneReponse_Index]));
+          tmp.add(Reponse(map[colonneReponse_Reponse],lastReponse==map[colonneReponse_Index],map[colonneReponse_Index],lastQuestionid));
         }
         res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
       }
@@ -164,36 +164,39 @@ class QuizzDBHelper {
     return res;
   }
 
-  void changeIndexQuestion(int idQuestion,int index,int newIndex) async{
-    Database? db = await instance.db ;
+  void changeIndexQuestion(int idQuestion,int index,int newIndex) async {
+    Database? db = await instance.db;
 
-    List<Map>? maps = await db?.query (tableQuestions,
-        columns: [colonneQuesion_quizz],
+    List<Map>? maps = await db?.query(tableQuestions,
+        columns: [colonneQuestion_quizz],
         where: '$colonneQuestion_ID = ?', whereArgs: [idQuestion]);
-    if(maps!=null){
-      if(maps.isNotEmpty){
-        int idQuizz = maps[0][colonneQuesion_quizz];
+    if (maps != null) {
+      if (maps.isNotEmpty) {
+        int idQuizz = maps[0][colonneQuestion_quizz];
 
-        if(index >newIndex){
-          await db?.rawUpdate('''UPDATE `questions` SET $colonneQuesion_index=$colonneQuesion_index+1 WHERE $colonneQuesion_quizz=$idQuizz AND $colonneQuesion_index<$index AND $colonneQuesion_index >=$newIndex; 
-                                UPDATE `questions` SET $colonneQuesion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion
+        if (index > newIndex) {
+          await db?.rawUpdate(
+              '''UPDATE `questions` SET $colonneQuestion_index=$colonneQuestion_index+1 WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index<$index AND $colonneQuestion_index >=$newIndex; 
+                                UPDATE `questions` SET $colonneQuestion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion
                               ''');
-        }else{
-          await db?.rawUpdate('''UPDATE `questions` SET $colonneQuesion_index=$colonneQuesion_index-1 WHERE $colonneQuesion_quizz=$idQuizz AND $colonneQuesion_index >$index AND $colonneQuesion_index <=$newIndex; 
-                                  UPDATE `questions` SET $colonneQuesion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion
+        } else {
+          await db?.rawUpdate(
+              '''UPDATE `questions` SET $colonneQuestion_index=$colonneQuestion_index-1 WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index >$index AND $colonneQuestion_index <=$newIndex; 
+                                  UPDATE `questions` SET $colonneQuestion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion
                                   ''');
         }
       }
     }
+  }
 
-    void changeQuestion(int idQuestion,String text) async{
-      Database? db = await instance.db ;
-      await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_question=$text WHERE $colonneQuestion_ID=$idQuestion''');
-    }
+  void changeQuestion(int idQuestion,String text) async{
+    Database? db = await instance.db ;
+    await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_question='$text' WHERE $colonneQuestion_ID=$idQuestion''');
+  }
 
-
-
-    
+  void changeReponseQuestion(Reponse r) async{
+    Database? db = await instance.db ;
+    await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_reponse='${r.index}' WHERE $colonneQuestion_ID=${r.question}''');
   }
 
 }

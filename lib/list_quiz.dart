@@ -30,7 +30,7 @@ class _SelectState extends State<ListQuiz> {
     Quiz.quizActuel = i;
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>  ListQuestion(title: "", quiz: Quiz.get(i)))
+        MaterialPageRoute(builder: (context) =>  ListQuestion(title: "", quiz: Quiz.get(i))),
     );
   }
 
@@ -52,7 +52,7 @@ class _SelectState extends State<ListQuiz> {
 
           return ListTile(
             title: Text("${item.nomQuizz}"),
-            subtitle: Text("$index"),
+            subtitle: Text("${item.questions.length}"),
             onTap: () => { select(index) },
           );
         },
