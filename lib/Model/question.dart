@@ -18,7 +18,7 @@ class Question{
          if(r.veracite)
             return r;
       }
-      throw new Exception("Pas de bonne réponse");
+      return new Reponse("", false, 0, questionActuelle);
    }
 
    Reponse getReponse(int i){
@@ -28,4 +28,16 @@ class Question{
    static Question getActuelle(){
       return Quiz.getActuel().questions[questionActuelle];
    }
+
+  int getReponseSize() {
+    return this.reponses.length;
+  }
+
+  void ajouterReponse(Reponse reponse) {
+    this.reponses.add(reponse);
+  }
+
+  void setText(String newText) {
+    this.question = newText;
+  }
 }

@@ -13,6 +13,8 @@ class EditQuestion extends StatefulWidget{
       : super(key: key);
 
   Question question;
+  String newTextReponse = "";
+  String newTextQuestion = "";
 
   @override
   State<EditQuestion> createState() => EditQuestionState();
@@ -45,6 +47,28 @@ class EditQuestionState extends State<EditQuestion>{
     widget.question.question=s;
   }
 
+  void ajouter(String s){
+    Reponse r = new Reponse(
+        s,
+        false,
+        widget.question.getReponseSize()+1,
+        widget.question.idQuestion
+    );
+    setState(() {
+      widget.question.ajouterReponse(r);
+    });
+    Navigator.pop(context, 'OK');
+  }
+
+  void valider(){
+    setState(() {
+      editQuestion(widget.newTextQuestion);
+    });
+    Navigator.of(context).pop();
+
+
+  }
+
   List<Widget> getWidgets(){
     List<Widget> wg = [];
     wg.add(
@@ -55,6 +79,7 @@ class EditQuestionState extends State<EditQuestion>{
               border: OutlineInputBorder(),
               hintText: widget.question.question,
             ),
+          onChanged: (String s) => {widget.newTextQuestion = s},
           onSubmitted: (String s)=>{
               editQuestion(s)
           },
@@ -68,6 +93,9 @@ class EditQuestionState extends State<EditQuestion>{
         RadioListTile( groupValue: indexBonneRep,  value:r.index, onChanged: (int ?i) => {commuter(i) }, title: Text(r.libelle),)
       );
     }
+    wg.add(
+      new ElevatedButton(onPressed: valider, child: Text("Valider"))
+    );
     return wg;
   }
 
@@ -78,13 +106,62 @@ class EditQuestionState extends State<EditQuestion>{
         title: Text(widget.title),
       ),
       body: Column(
-        children: getWidgets()
-      )
+        children: getWidgets(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Nouvelle question'),
+            actions: <Widget>[
+              Column(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Entrez la nouvelle réponse",
+                        ),
+                        onChanged: (String s)=>{
+                          widget.newTextReponse = s
+                        },
+                      )
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => {
+                          Navigator.pop(context, 'Cancel')
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () => {
+                          ajouter(widget.newTextReponse)
+                        },
+                        child: const Text('Ajouter'),
+                      ),
+                    ],
+                  )
+                ],
+              )
+
+            ],
+          ),
+        ),
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 
   @override
   void initState() {
-    indexBonneRep=widget.question.reponses.firstWhere((element) => element.veracite).index;
+    if(widget.question.reponses.isNotEmpty){
+      indexBonneRep=widget.question.reponses.firstWhere((element) => element.veracite).index;
+    }else{
+      indexBonneRep=0;
+    }
   }
 }
