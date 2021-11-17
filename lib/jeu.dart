@@ -1,6 +1,3 @@
-
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:tp_flutter_jaugey_nohan/Model/Quiz.dart';
 import 'package:tp_flutter_jaugey_nohan/resultat.dart';
