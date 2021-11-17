@@ -51,7 +51,7 @@ class _SelectState extends State<Select> {
                     final item = Quiz.get(index);
 
                     return ListTile(
-                      title: Text("Quiz $index"),
+                      title: Text("Quiz ${item.nomQuizz}"),
                       subtitle: Text("$index"),
                       onTap: () => { select(index) },
                     );

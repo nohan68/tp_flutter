@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:tp_flutter_jaugey_nohan/list_quiz.dart';
-import 'package:tp_flutter_jaugey_nohan/jeu.dart';
 import 'package:tp_flutter_jaugey_nohan/select.dart';
 
 class Accueil extends StatelessWidget{

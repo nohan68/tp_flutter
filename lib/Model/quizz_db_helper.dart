@@ -52,6 +52,7 @@ class QuizzDBHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, nomBaseDonnees);
+    //await deleteDatabase(path);
     // var exists = await databaseExists(path);
     return await openDatabase(path, version: databaseVersion, onCreate: _open);
   }
@@ -129,7 +130,7 @@ class QuizzDBHelper {
         int lastQuestionid = maps[0][colonneQuestion_ID];
         int lastReponse = maps[0][colonneQuesion_reponse];
         String lastQuestion = maps[0][colonneQuestion_question];
-        res.nomQuizz=maps[0][colonneQuizz_ID];
+        res.nomQuizz=maps[0][colonneQuizz_Name];
         res.idQuizz=id;
         for (Map map in maps) {
           if(lastQuestionid!=map[colonneQuestion_ID]){

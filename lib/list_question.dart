@@ -52,7 +52,7 @@ class _SelectState extends State<ListQuestion> {
           final item = widget.quiz.getQuestion(index);
 
           return ListTile(
-            title: Text("Quiz ${item.question}"),
+            title: Text("${item.question}"),
             subtitle: Text("${item.getBonneReponse().libelle}"),
             onTap: () => { select(index) },
           );

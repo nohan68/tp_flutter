@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 import 'Model/question.dart';
+import 'Model/reponse.dart';
+
 
 class EditQuestion extends StatelessWidget{
   var title;
@@ -15,7 +17,6 @@ class EditQuestion extends StatelessWidget{
   }
 
   void commuter(Reponse r, bool ?b){
-
     r.setVeracite(b);
   }
 
