@@ -1,13 +1,25 @@
 
 
 
-import 'package:tp_flutter_jaugey_nohan/Model/Question.dart';
+import 'package:tp_flutter_jaugey_nohan/Model/question.dart';
+import 'package:tp_flutter_jaugey_nohan/Model/quizz_db_helper.dart';
 
 class Quiz{
   static int quizActuel = 0;
 
   static List<Quiz> quizzes = <Quiz>[];
+  static QuizzDBHelper quizzDBHelper=QuizzDBHelper.instance;
   List<Question> questions = <Question>[];
+  int idQuizz=-1;
+  String nomQuizz="";
+
+  Quiz.empty();
+
+  Quiz(this.idQuizz, this.nomQuizz);
+
+  static init() async{
+    quizzes = await quizzDBHelper.getQuizzs();
+  }
 
 
   static get(int i){
@@ -28,9 +40,6 @@ class Quiz{
   Question getQuestion(int i){
     return this.questions[i];
   }
-
-
-
 
 
 }

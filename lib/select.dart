@@ -1,11 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:tp_flutter_jaugey_nohan/Model/Quiz.dart';
-import 'package:tp_flutter_jaugey_nohan/resultat.dart';
-
-import 'Model/Question.dart';
-import 'Model/Reponse.dart';
+import 'package:tp_flutter_jaugey_nohan/Model/quiz.dart';
 import 'jeu.dart';
 
 class Select extends StatefulWidget {

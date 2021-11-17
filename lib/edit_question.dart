@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'Model/Question.dart';
-import 'Model/Reponse.dart';
+import 'Model/question.dart';
 
 class EditQuestion extends StatelessWidget{
   var title;

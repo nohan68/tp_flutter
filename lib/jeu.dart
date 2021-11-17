@@ -1,9 +1,10 @@
+
 import 'package:flutter/material.dart';
-import 'package:tp_flutter_jaugey_nohan/Model/Quiz.dart';
+import 'package:tp_flutter_jaugey_nohan/Model/quiz.dart';
 import 'package:tp_flutter_jaugey_nohan/resultat.dart';
 
-import 'Model/Question.dart';
-import 'Model/Reponse.dart';
+import 'Model/question.dart';
+import 'Model/reponse.dart';
 
 class Jeu extends StatefulWidget {
   Jeu({Key? key, required this.title}) : super(key: key);
@@ -43,7 +44,7 @@ class _JeuState extends State<Jeu> {
     Question.questionActuelle = 0;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) =>  Resultat(this.bonneReponses, this.mauvaisesReponses)),
+      MaterialPageRoute(builder: (context) =>  Resultat(bonneReponses, mauvaisesReponses)),
     );
   }
 
