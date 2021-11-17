@@ -37,23 +37,29 @@ class _SelectState extends State<ListQuestion> {
         context,
         MaterialPageRoute(builder: (context) =>  EditQuestion(title: "", question: widget.quiz.getQuestion(i)))
     );
-    //TODO mettre setstate avec quizz update
+    setState(() {
+      Quiz.init();
+    });
   }
 
-  void delete(DismissDirection d, int question) async{
+  void delete(DismissDirection d, int question,int idQuestion) async{
+    Quiz.quizzDBHelper.supprimerQuestion(idQuestion);
     setState(() {
       widget.quiz.remove(question);
+      Quiz.init();
     });
   }
 
   void ajouter(String s) async{
     Navigator.pop(context, 'OK');
-    Question q = new Question(s, [], this.widget.quiz.size());
-    Question.questionActuelle = this.widget.quiz.size();
+    int id = await Quiz.quizzDBHelper.ajouterQuestion(widget.quiz.idQuizz, s);
+    Question q = Question(s, [],id);
+    Question.questionActuelle = widget.quiz.size();
     setState(() {
-      this.widget.quiz.addQuestion(q);
+      widget.quiz.addQuestion(q);
+      Quiz.init();
     });
-    print(this.widget.quiz.questions);
+    print(widget.quiz.questions);
 
 
     print("ajout de $s");
@@ -82,11 +88,11 @@ class _SelectState extends State<ListQuestion> {
           return Dismissible(
               key: Key(item.question),
               child: ListTile(
-                title: Text("${item.question}"),
-                subtitle: Text("${item.getBonneReponse().libelle}"),
+                title: Text(item.question),
+                subtitle: Text(item.getBonneReponse().libelle),
                 onTap: () => { select(index) }
               ),
-              onDismissed: (d) => {delete(d, index)}
+              onDismissed: (d) => {delete(d, index,item.idQuestion)}
           );
         },
       ),

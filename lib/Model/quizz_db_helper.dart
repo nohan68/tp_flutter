@@ -41,6 +41,7 @@ class QuizzDBHelper {
   }
 
   Future<Database?> get db async {
+    //_initDatabase();
     if (_db != null) {
       return _db;
     } else {
@@ -140,7 +141,9 @@ class QuizzDBHelper {
             lastQuestion = map[colonneQuestion_question];
             tmp =[];
           }
-          tmp.add(Reponse(map[colonneReponse_Reponse],lastReponse==map[colonneReponse_Index],map[colonneReponse_Index],lastQuestionid));
+          if(map[colonneReponse_Reponse]!=null){
+            tmp.add(Reponse(map[colonneReponse_Reponse],lastReponse==map[colonneReponse_Index],map[colonneReponse_Index],lastQuestionid));
+          }
         }
         res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
       }
@@ -197,6 +200,48 @@ class QuizzDBHelper {
   void changeReponseQuestion(Reponse r) async{
     Database? db = await instance.db ;
     await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_reponse='${r.index}' WHERE $colonneQuestion_ID=${r.question}''');
+  }
+
+  void ajouterReponseQuestion(int idQuestion,String reponse) async{
+    Database? db = await instance.db ;
+
+    List<Map>? maps = await db?.rawQuery("SELECT MAX($colonneReponse_Index),$colonneReponse_Question AS max FROM $tableReponses WHERE $colonneReponse_Question=$idQuestion");
+    if (maps != null) {
+      if (maps.isNotEmpty) {
+        print(maps);
+        int index =1;
+        if(maps[0]['max']!=null){
+          index = maps[0]['max']+1;
+        }
+
+        await db?.insert(tableReponses, {
+          colonneReponse_Reponse: reponse,
+          colonneReponse_Question: idQuestion,
+          colonneReponse_Index: index
+        });
+      }
+    }
+  }
+
+  Future <int> ajouterQuestion(int idQuizz, String text) async{
+    Database? db = await instance.db ;
+    print("String : $text");
+
+    List<Map>? maps = await db?.rawQuery("SELECT MAX($colonneQuestion_index) AS max FROM $tableQuestions WHERE $colonneQuestion_quizz=$idQuizz");
+    if (maps != null) {
+      if (maps.isNotEmpty) {
+        int index = maps[0]['max']+1;
+        return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:index,colonneQuestion_reponse:1});
+      }
+      return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:1,colonneQuestion_reponse:1});
+    }
+    throw Exception("Insertion impossaible de la question");
+  }
+  
+  void supprimerQuestion(int idQuestion)async{
+    Database? db = await instance.db ;
+    await db?.delete(tableReponses,where: '$colonneReponse_Question = ?', whereArgs: [idQuestion]);
+    await db?.delete(tableQuestions,where: '$colonneQuestion_ID = ?', whereArgs: [idQuestion]);
   }
 
 }

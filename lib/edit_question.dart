@@ -48,12 +48,14 @@ class EditQuestionState extends State<EditQuestion>{
   }
 
   void ajouter(String s){
-    Reponse r = new Reponse(
+    Quiz.quizzDBHelper.ajouterReponseQuestion(widget.question.idQuestion, s);
+    Reponse r = Reponse(
         s,
         false,
         widget.question.getReponseSize()+1,
         widget.question.idQuestion
     );
+    Quiz.init();
     setState(() {
       widget.question.ajouterReponse(r);
     });
@@ -73,28 +75,28 @@ class EditQuestionState extends State<EditQuestion>{
     List<Widget> wg = [];
     wg.add(
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        child: TextField(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: TextFormField(
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               hintText: widget.question.question,
             ),
+          initialValue: widget.question.question,
           onChanged: (String s) => {widget.newTextQuestion = s},
-          onSubmitted: (String s)=>{
+          onFieldSubmitted: (String s)=>{
               editQuestion(s)
           },
         )
       )
     );
-    print(indexBonneRep);
     for(Reponse r in widget.question.reponses){
-      print("i:${r.index}");
+      print("reponse ${r.libelle} ${r.veracite} ${r.index}");
       wg.add(
         RadioListTile( groupValue: indexBonneRep,  value:r.index, onChanged: (int ?i) => {commuter(i) }, title: Text(r.libelle),)
       );
     }
     wg.add(
-      new ElevatedButton(onPressed: valider, child: Text("Valider"))
+      ElevatedButton(onPressed: valider, child: const Text("Valider"))
     );
     return wg;
   }
@@ -117,9 +119,9 @@ class EditQuestionState extends State<EditQuestion>{
               Column(
                 children: [
                   Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: "Entrez la nouvelle réponse",
                         ),
@@ -158,10 +160,12 @@ class EditQuestionState extends State<EditQuestion>{
 
   @override
   void initState() {
+    super.initState();
+    widget.newTextQuestion=widget.question.question;
     if(widget.question.reponses.isNotEmpty){
-      indexBonneRep=widget.question.reponses.firstWhere((element) => element.veracite).index;
+      indexBonneRep=(widget.question.reponses.firstWhere((element) => element.veracite, orElse: ()=> widget.question.reponses[0])).index;
     }else{
-      indexBonneRep=0;
+      indexBonneRep=1;
     }
   }
 }

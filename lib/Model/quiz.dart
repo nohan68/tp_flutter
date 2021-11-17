@@ -38,19 +38,19 @@ class Quiz{
   }
 
   Question getQuestion(int i){
-    return this.questions[i];
+    return questions[i];
   }
 
   addQuestion(Question q){
-    this.questions.add(q);
+    questions.add(q);
   }
 
   void remove(int question) {
-    this.questions.removeAt(question);
+    questions.removeAt(question);
   }
 
   int size(){
-    return this.questions.length;
+    return questions.length;
   }
 
 

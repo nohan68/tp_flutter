@@ -49,7 +49,6 @@ class _SelectState extends State<ListQuiz> {
         // Convert each item into a widget based on the type of item it is.
         itemBuilder: (context, index) {
           final item = Quiz.get(index);
-
           return ListTile(
             title: Text("${item.nomQuizz}"),
             subtitle: Text("${item.questions.length}"),
