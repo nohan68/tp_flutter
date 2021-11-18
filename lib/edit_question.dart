@@ -90,7 +90,6 @@ class EditQuestionState extends State<EditQuestion>{
       )
     );
     for(Reponse r in widget.question.reponses){
-      print("reponse ${r.libelle} ${r.veracite} ${r.index}");
       wg.add(
         RadioListTile( groupValue: indexBonneRep,  value:r.index, onChanged: (int ?i) => {commuter(i) }, title: Text(r.libelle),)
       );

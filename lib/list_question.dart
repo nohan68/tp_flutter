@@ -107,7 +107,7 @@ class _SelectState extends State<ListQuestion> {
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                         child: TextField(
-                          decoration: InputDecoration(
+mof                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "Entrez la nouvelle question",
                           ),
