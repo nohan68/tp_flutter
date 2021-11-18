@@ -17,7 +17,7 @@ class Quiz{
 
   Quiz(this.idQuizz, this.nomQuizz);
 
-  static init() async{
+  static Future<void> refresh() async{
     quizzes = await quizzDBHelper.getQuizzs();
   }
 

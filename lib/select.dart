@@ -65,6 +65,6 @@ class _SelectState extends State<Select> {
   @override
   void initState() {
     super.initState();
-    Quiz.init();
+    Quiz.refresh();
   }
 }

@@ -12,7 +12,7 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Quiz.init();
+    Quiz.refresh();
 
     return MaterialApp(
       title: 'Quiz',

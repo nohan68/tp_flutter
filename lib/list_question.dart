@@ -32,21 +32,20 @@ class ListQuestion extends StatefulWidget {
 class _SelectState extends State<ListQuestion> {
 
   void select(int i) async{
-    Quiz.quizActuel = i;
     await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>  EditQuestion(title: "", question: widget.quiz.getQuestion(i)))
     );
     setState(() {
-      Quiz.init();
+      Quiz.refresh();
     });
   }
 
   void delete(DismissDirection d, int question,int idQuestion) async{
-    Quiz.quizzDBHelper.supprimerQuestion(idQuestion);
+    await Quiz.quizzDBHelper.supprimerQuestion(idQuestion);
     setState(() {
       widget.quiz.remove(question);
-      Quiz.init();
+      Quiz.refresh();
     });
   }
 
@@ -57,7 +56,7 @@ class _SelectState extends State<ListQuestion> {
     Question.questionActuelle = widget.quiz.size();
     setState(() {
       widget.quiz.addQuestion(q);
-      Quiz.init();
+      Quiz.refresh();
     });
     print(widget.quiz.questions);
 
@@ -73,12 +72,12 @@ class _SelectState extends State<ListQuestion> {
 
   @override
   Widget build(BuildContext context) {
-
+    print("build");
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView.builder(
+      body: ReorderableListView.builder(
         // Let the ListView know how many items it needs to build.
         itemCount: widget.quiz.questions.length,
         // Provide a builder function. This is where the magic happens.
@@ -94,7 +93,9 @@ class _SelectState extends State<ListQuestion> {
               ),
               onDismissed: (d) => {delete(d, index,item.idQuestion)}
           );
-        },
+        }, onReorder: (int oldIndex, int newIndex) {
+          changeOrdre(oldIndex,newIndex);
+      },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<String>(
@@ -170,5 +171,24 @@ class _SelectState extends State<ListQuestion> {
         );
       },
     );
+  }
+
+  void changeOrdre(int oldIndex, int newIndex) async{
+    int indexOld=oldIndex+1;
+    int indexNew=newIndex;
+    print("inital index : $oldIndex $newIndex");
+    if(oldIndex>newIndex){
+      indexNew+=1;
+    }
+
+    print("indexes : $indexOld $indexNew");
+    await Quiz.quizzDBHelper.changeIndexQuestion(widget.quiz.idQuizz,indexOld, indexNew);
+    Question q = widget.quiz.questions[indexOld-1];
+    widget.quiz.questions.removeAt(indexOld-1);
+    widget.quiz.questions.insert(indexNew-1, q);
+    setState(() {
+      Quiz.refresh();
+    });
+
   }
 }

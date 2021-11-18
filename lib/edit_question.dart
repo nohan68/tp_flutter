@@ -31,9 +31,9 @@ class EditQuestionState extends State<EditQuestion>{
 
 
 
-  void commuter(int ?i){
-    Quiz.quizzDBHelper.changeReponseQuestion(widget.question.reponses.firstWhere((element) => element.index==i));
-    Quiz.init();
+  void commuter(int ?i) async{
+    await Quiz.quizzDBHelper.changeReponseQuestion(widget.question.reponses.firstWhere((element) => element.index==i));
+    Quiz.refresh();
     if(i!=null) {
       setState(() {
         indexBonneRep = i;
@@ -41,21 +41,21 @@ class EditQuestionState extends State<EditQuestion>{
     }
   }
 
-  void editQuestion(String s){
-    Quiz.quizzDBHelper.changeQuestion(widget.question.idQuestion,s );
-    Quiz.init();
+  void editQuestion(String s) async{
+    await Quiz.quizzDBHelper.changeQuestion(widget.question.idQuestion,s );
+    Quiz.refresh();
     widget.question.question=s;
   }
 
-  void ajouter(String s){
-    Quiz.quizzDBHelper.ajouterReponseQuestion(widget.question.idQuestion, s);
+  void ajouter(String s)async {
+    await Quiz.quizzDBHelper.ajouterReponseQuestion(widget.question.idQuestion, s);
     Reponse r = Reponse(
         s,
         false,
         widget.question.getReponseSize()+1,
         widget.question.idQuestion
     );
-    Quiz.init();
+    Quiz.refresh();
     setState(() {
       widget.question.ajouterReponse(r);
     });
