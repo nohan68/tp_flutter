@@ -205,15 +205,14 @@ class QuizzDBHelper {
   void ajouterReponseQuestion(int idQuestion,String reponse) async{
     Database? db = await instance.db ;
 
-    List<Map>? maps = await db?.rawQuery("SELECT MAX($colonneReponse_Index),$colonneReponse_Question AS max FROM $tableReponses WHERE $colonneReponse_Question=$idQuestion");
+    List<Map>? maps = await db?.rawQuery("SELECT MAX($colonneReponse_Index) AS max FROM $tableReponses WHERE $colonneReponse_Question=$idQuestion");
     if (maps != null) {
       if (maps.isNotEmpty) {
-        print(maps);
         int index =1;
         if(maps[0]['max']!=null){
           index = maps[0]['max']+1;
         }
-
+        print("index $index");
         await db?.insert(tableReponses, {
           colonneReponse_Reponse: reponse,
           colonneReponse_Question: idQuestion,
@@ -225,7 +224,6 @@ class QuizzDBHelper {
 
   Future <int> ajouterQuestion(int idQuizz, String text) async{
     Database? db = await instance.db ;
-    print("String : $text");
 
     List<Map>? maps = await db?.rawQuery("SELECT MAX($colonneQuestion_index) AS max FROM $tableQuestions WHERE $colonneQuestion_quizz=$idQuizz");
     if (maps != null) {

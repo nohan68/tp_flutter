@@ -95,4 +95,9 @@ class _JeuState extends State<Jeu> {
         )
     );
   }
+
+  @override
+  void initState() {
+    Question.questionActuelle=0;
+  }
 }

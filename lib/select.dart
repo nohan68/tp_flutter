@@ -26,6 +26,8 @@ class Select extends StatefulWidget {
 
 class _SelectState extends State<Select> {
 
+
+
   void select(int i){
     Quiz.quizActuel = i;
     Navigator.push(
@@ -58,5 +60,11 @@ class _SelectState extends State<Select> {
                   },
                 ),
         );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Quiz.init();
   }
 }

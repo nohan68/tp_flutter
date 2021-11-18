@@ -14,30 +14,32 @@ class Question{
    Question(this.question,this.reponses,this.idQuestion);
 
   Reponse getBonneReponse(){
-      for(Reponse r in this.reponses){
-         if(r.veracite)
-            return r;
+      for(Reponse r in reponses){
+         if(r.veracite) {
+           return r;
+         }
       }
-      return new Reponse("", false, 0, questionActuelle);
+      return Reponse("", false, 0, questionActuelle);
    }
 
    Reponse getReponse(int i){
-      return this.reponses[i];
+      return reponses[i];
    }
 
    static Question getActuelle(){
+      print("actuelle : $questionActuelle");
       return Quiz.getActuel().questions[questionActuelle];
    }
 
   int getReponseSize() {
-    return this.reponses.length;
+    return reponses.length;
   }
 
   void ajouterReponse(Reponse reponse) {
-    this.reponses.add(reponse);
+    reponses.add(reponse);
   }
 
   void setText(String newText) {
-    this.question = newText;
+    question = newText;
   }
 }
