@@ -11,4 +11,7 @@ class Reponse{
   void setVeracite(bool? b) {
     this.veracite = b!;
   }
+
+  static void deleteReponse(int idQuestion, index) {}
+
 }
