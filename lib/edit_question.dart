@@ -107,13 +107,98 @@ class EditQuestionState extends State<EditQuestion>{
         title: Text(widget.title),
       ),
       body: Column(
-        children: getWidgets(),
+        children: [
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: widget.question.question,
+                ),
+                initialValue: widget.question.question,
+                onChanged: (String s) => {widget.newTextQuestion = s},
+                onFieldSubmitted: (String s)=>{
+                  editQuestion(s)
+                },
+              )
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.30,
+            child:
+              ListView.builder(
+              // Let the ListView know how many items it needs to build.
+              itemCount: widget.question.reponses.length,
+              // Provide a builder function. This is where the magic happens.
+              // Convert each item into a widget based on the type of item it is.
+              itemBuilder: (context, index) {
+                final Reponse item = widget.question.reponses[index];
+                return Dismissible(
+                    key: Key(item.libelle),
+                    child: ListTile(
+                        title: Text(item.libelle),
+                        subtitle: Text(item.veracite ? "Vrai" : "Faux"),
+                        onTap: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Modifier la réponse'),
+                          actions: <Widget>[
+                            Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: item.libelle,
+                                      ),
+                                      initialValue: item.libelle,
+                                      onChanged: (String s)=>{
+                                        widget.newTextReponse = s
+                                      },
+                                    )
+                                ),
+                                Row(
+                                  children:  [
+
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    //RadioListTile( groupValue: indexBonneRep,  value:index, onChanged: (int ?i) => { }, title: Text(item.libelle),),
+                                    TextButton(
+                                      onPressed: () => {
+                                        Navigator.pop(context, 'Cancel')
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => {
+                                        ajouter(widget.newTextReponse)
+                                      },
+                                      child: const Text('Modifier'),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+
+                          ],
+                        ),
+                      ),
+                    ),
+                    onDismissed: (d) => { }
+                );
+              },
+            ),
+          ),
+          ElevatedButton(onPressed: valider, child: const Text("Valider")),
+        ]
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: const Text('Nouvelle question'),
+            title: const Text('Nouvelle Réponse'),
             actions: <Widget>[
               Column(
                 children: [
