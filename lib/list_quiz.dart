@@ -19,6 +19,7 @@ class ListQuiz extends StatefulWidget {
 
 
   final String title;
+  String nouveauTitre = "";
 
   @override
   State<ListQuiz> createState() => _SelectState();
@@ -39,6 +40,7 @@ class _SelectState extends State<ListQuiz> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -49,13 +51,91 @@ class _SelectState extends State<ListQuiz> {
         // Convert each item into a widget based on the type of item it is.
         itemBuilder: (context, index) {
           final item = Quiz.get(index);
-          return ListTile(
+          return Dismissible(
+              key: Key(item.nomQuizz),
+              child: ListTile(
+                  title: Text(item.nomQuizz),
+                  subtitle: Text("$index"),
+                  onTap: () => { select(index) }
+              ),
+              onDismissed: (d) => {delete(d, index)}
+          );
+          /*
+            ListTile(
             title: Text("${item.nomQuizz}"),
             subtitle: Text("${item.questions.length}"),
             onTap: () => { select(index) },
           );
+
+           */
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Nouveau quiz'),
+        actions: <Widget>[
+          Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Nom du quiz",
+                    ),
+                    onChanged: (String s)=>{
+                      widget.nouveauTitre = s
+                    },
+                  )
+              ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.pop(context, 'Cancel')
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => {
+                      ajouter(widget.nouveauTitre)
+                    },
+                    child: const Text('Ajouter'),
+                  ),
+                ],
+              )
+            ],
+          )
+
+        ],
+      ),
+    ),
+    child: const Icon(Icons.add),
+    backgroundColor: Colors.green,
+    ),
     );
+  }
+
+  ajouter(String nouveauTitre) {
+    Quiz nouveauQuiz = new Quiz(Quiz.quizzes.length, nouveauTitre);
+    setState(() {
+      Quiz.add(nouveauQuiz);
+    });
+    Quiz.quizActuel = Quiz.quizzes.length-1;
+    Navigator.pop(context, 'OK');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) =>  ListQuestion(title: "", quiz: Quiz.get(Quiz.quizzes.length-1))),
+    );
+
+
+  }
+
+  delete(DismissDirection d, int index) {
+    setState(() {
+      Quiz.quizzes.removeAt(index);
+    });
   }
 }
