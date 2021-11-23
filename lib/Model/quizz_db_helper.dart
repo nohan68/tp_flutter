@@ -181,21 +181,17 @@ class QuizzDBHelper {
 
   Future<void> changeIndexQuestion(int idQuizz,int index,int newIndex) async {
     Database? db = await instance.db;
-    print("idquizz $idQuizz");
     List<Map>? maps = await db?.rawQuery("SELECT $colonneQuestion_ID FROM $tableQuestions WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index=$index");
-    print("maps $maps");
     if (maps != null) {
       if (maps.isNotEmpty) {
 
         int idQuestion = maps[0][colonneQuestion_ID];
-        print("change index $idQuizz $index $newIndex $idQuestion");
         if (index > newIndex) {
-          await db?.rawUpdate("UPDATE `questions` SET $colonneQuestion_index=$colonneQuestion_index+1 WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index<$index AND $colonneQuestion_index >=$newIndex");
+          await db?.rawUpdate("UPDATE `$tableQuestions` SET $colonneQuestion_index=$colonneQuestion_index+1 WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index<$index AND $colonneQuestion_index >=$newIndex");
           int? res = await db?.rawUpdate("UPDATE `questions` SET $colonneQuestion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion");
-          print("res : $res");
         } else {
-          await db?.rawUpdate("UPDATE `questions` SET $colonneQuestion_index=$colonneQuestion_index-1 WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index >$index AND $colonneQuestion_index <=$newIndex");
-          await db?.rawUpdate("UPDATE `questions` SET $colonneQuestion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion");
+          await db?.rawUpdate("UPDATE `$tableQuestions` SET $colonneQuestion_index=$colonneQuestion_index-1 WHERE $colonneQuestion_quizz=$idQuizz AND $colonneQuestion_index >$index AND $colonneQuestion_index <=$newIndex");
+          await db?.rawUpdate("UPDATE `$tableQuestions` SET $colonneQuestion_index=$newIndex WHERE $colonneQuestion_ID=$idQuestion");
         }
       }
     }
@@ -203,12 +199,12 @@ class QuizzDBHelper {
 
   Future<void> changeQuestion(int idQuestion,String text) async{
     Database? db = await instance.db ;
-    await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_question='$text' WHERE $colonneQuestion_ID=$idQuestion''');
+    await db?.rawUpdate('''UPDATE $tableQuestions SET $colonneQuestion_question='$text' WHERE $colonneQuestion_ID=$idQuestion''');
   }
 
   Future<void> changeReponseQuestion(Reponse r) async{
     Database? db = await instance.db ;
-    await db?.rawUpdate('''UPDATE questions SET $colonneQuestion_reponse='${r.index}' WHERE $colonneQuestion_ID=${r.question}''');
+    await db?.rawUpdate('''UPDATE $tableQuestions SET $colonneQuestion_reponse='${r.index}' WHERE $colonneQuestion_ID=${r.question}''');
   }
 
   Future<void> ajouterReponseQuestion(int idQuestion,String reponse) async{
@@ -221,7 +217,6 @@ class QuizzDBHelper {
         if(maps[0]['max']!=null){
           index = maps[0]['max']+1;
         }
-        print("index $index");
         await db?.insert(tableReponses, {
           colonneReponse_Reponse: reponse,
           colonneReponse_Question: idQuestion,
@@ -238,7 +233,6 @@ class QuizzDBHelper {
     if (maps != null) {
       if (maps.isNotEmpty) {
         int index =1;
-        print("maps $maps");
         if(maps[0]['max']!=null){
           index = maps[0]['max']+1;
         }
@@ -246,13 +240,59 @@ class QuizzDBHelper {
       }
       return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:1,colonneQuestion_reponse:1});
     }
-    throw Exception("Insertion impossaible de la question");
+    throw Exception("Insertion impossible");
   }
 
   Future<void> supprimerQuestion(int idQuestion)async{
     Database? db = await instance.db ;
     await db?.delete(tableReponses,where: '$colonneReponse_Question = ?', whereArgs: [idQuestion]);
     await db?.delete(tableQuestions,where: '$colonneQuestion_ID = ?', whereArgs: [idQuestion]);
+  }
+
+  Future<void> supprimerReponse(Reponse r)async{
+    Database? db = await instance.db ;
+    await db?.rawDelete("DELETE FROM $tableReponses WHERE $colonneReponse_Question=${r.question} AND $colonneReponse_Index = ${r.index}");
+  }
+
+  Future<void> changeIndexReponse(int idQuestion,int index,int newIndex) async {
+    Database? db = await instance.db;
+
+    if (index > newIndex) {
+      await db?.rawUpdate("UPDATE $tableReponses SET $colonneReponse_Index = -1 WHERE $colonneReponse_Question = $idQuestion AND $colonneReponse_Index = $index;");
+      await db?.rawUpdate("UPDATE $tableReponses SET $colonneReponse_Index =  $colonneReponse_Index +1 WHERE $colonneReponse_Question=$idQuestion AND $colonneReponse_Index < $index AND $colonneReponse_Index >= $newIndex;");
+      await db?.rawUpdate("UPDATE $tableReponses SET $colonneReponse_Index = $newIndex WHERE $colonneReponse_Question = $idQuestion AND $colonneReponse_Index = -1");
+    } else {
+      await db?.rawUpdate("UPDATE $tableReponses SET $colonneReponse_Index = -1 WHERE $colonneReponse_Question = $idQuestion AND $colonneReponse_Index = $index;");
+      await db?.rawUpdate("UPDATE $tableReponses SET $colonneReponse_Index =  $colonneReponse_Index -1 WHERE $colonneReponse_Question=$idQuestion AND $colonneReponse_Index <= $newIndex AND $colonneReponse_Index > $index;");
+      await db?.rawUpdate("UPDATE $tableReponses SET $colonneReponse_Index = $newIndex WHERE $colonneReponse_Question = $idQuestion AND $colonneReponse_Index = -1");
+    }
+  }
+
+  Future<int?> ajouterQuizz(String nom)async{
+    Database? db = await instance.db;
+    int? res=await db?.insert(tableQuizz, {
+      colonneQuizz_Name: nom
+    });
+    return res;
+  }
+
+  Future<void> changerNonQuizz(int quizzId,String nom) async{
+    Database? db = await instance.db ;
+    await db?.rawUpdate('''UPDATE $tableQuizz SET $colonneQuizz_Name='$nom' WHERE $colonneQuizz_ID=$quizzId''');
+  }
+
+  Future<void> supprimerQuizz(int quizzId) async{
+    Database? db = await instance.db ;
+    List<Map>? maps =await db?.rawQuery("SELECT $colonneQuestion_ID FROM $tableQuestions WHERE $colonneQuestion_quizz=$quizzId");
+
+    if (maps != null) {
+      if (maps.isNotEmpty) {
+        for (Map map in maps) {
+          supprimerQuestion(map[colonneQuestion_ID]);
+        }
+      }
+    }
+    await db?.delete(tableQuizz,where: '$colonneQuizz_ID = ?', whereArgs: [quizzId]);
   }
 
 }
