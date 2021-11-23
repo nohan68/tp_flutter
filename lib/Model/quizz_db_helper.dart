@@ -122,12 +122,14 @@ class QuizzDBHelper {
   Future close() async => _db?.close();
 
   Future<Quiz> getQuizz(int id) async{
+    print("Quizz build : $id");
     Database? db = await instance.db ;
     List<Map>? maps = await db?.rawQuery ('''SELECT $colonneQuestion_index, $colonneQuizz_Name, $colonneQuestion_ID,$colonneQuestion_reponse,
                                               $colonneQuestion_question,$colonneReponse_Reponse,$colonneReponse_Index
                                               FROM $tableQuizz
                                               LEFT OUTER JOIN $tableQuestions ON $tableQuestions.$colonneQuestion_quizz=$tableQuizz.$colonneQuizz_ID
                                               LEFT OUTER JOIN $tableReponses ON $tableQuestions.$colonneQuestion_ID=$tableReponses.$colonneReponse_Question
+                                              WHERE $colonneQuestion_quizz = $id
                                               ORDER BY $tableQuestions.$colonneQuestion_index,$tableReponses.$colonneReponse_Index''');
     Quiz res = Quiz.empty();
     if (maps != null) {

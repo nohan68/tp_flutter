@@ -138,9 +138,7 @@ class EditQuestionState extends State<EditQuestion>{
                         title: Text(item.libelle),
                         subtitle: Text(item.veracite ? "Vrai" : "Faux"),
                         onChanged: (value) {
-                          setState(() {
-                            indexBonneRep = index+1;
-                          });
+                          changeVeracite(index);
                         },
                         groupValue: indexBonneRep,
                         value: item.index,
@@ -271,5 +269,13 @@ class EditQuestionState extends State<EditQuestion>{
       });
     }
 
+  }
+
+  void changeVeracite(int index) {
+    Quiz.quizzDBHelper.changeReponseQuestion(widget.question.reponses[index]);
+    setState(() {
+      Quiz.refresh();
+      indexBonneRep = index+1;
+    });
   }
 }
