@@ -20,6 +20,7 @@ class ListQuiz extends StatefulWidget {
 
   final String title;
   String nouveauTitre = "";
+  String editTitre = "";
 
   @override
   State<ListQuiz> createState() => _SelectState();
@@ -60,14 +61,7 @@ class _SelectState extends State<ListQuiz> {
               ),
               onDismissed: (d) => {delete(d, index)}
           );
-          /*
-            ListTile(
-            title: Text("${item.nomQuizz}"),
-            subtitle: Text("${item.questions.length}"),
-            onTap: () => { select(index) },
-          );
 
-           */
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -134,8 +128,68 @@ class _SelectState extends State<ListQuiz> {
   }
 
   delete(DismissDirection d, int index) {
+    if(d ==  DismissDirection.endToStart){
+      setState(() {
+        Quiz.quizzes.removeAt(index);
+      });
+    }
+
+    if(d == DismissDirection.startToEnd) {
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) =>
+              AlertDialog(
+                title: const Text('Editer la question'),
+                actions: <Widget>[
+                  Column(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16),
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: "Entrez le nouveau nom",
+                            ),
+                            onChanged: (String s) =>
+                            {
+                              widget.editTitre = s
+                            },
+                          )
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: () =>
+                            {
+                              Navigator.pop(context, 'Cancel')
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                            {
+                              edit(widget.editTitre, index)
+                            },
+                            child: const Text('Modifier'),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+
+                ],
+              )
+      );
+    }
+
+  }
+
+  edit(String editTitre, int index) {
+    Quiz.get(index).setNom(editTitre);
     setState(() {
-      Quiz.quizzes.removeAt(index);
+
     });
+    Navigator.pop(context, 'Cancel');
   }
 }

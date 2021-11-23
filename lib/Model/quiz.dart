@@ -22,7 +22,7 @@ class Quiz{
   }
 
 
-  static get(int i){
+  static Quiz get(int i){
     return Quiz.quizzes[i];
   }
 
@@ -51,6 +51,10 @@ class Quiz{
 
   int size(){
     return questions.length;
+  }
+
+  void setNom(String nom){
+    this.nomQuizz = nom;
   }
 
 
