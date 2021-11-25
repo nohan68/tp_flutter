@@ -39,7 +39,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  xml2json: ^5.3.1
+  http: ^0.13.4
   path_provider:
   sqflite:
   # The "flutter_lints" package below contains a set of recommended lints to

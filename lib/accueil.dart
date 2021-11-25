@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class Accueil extends StatelessWidget{
   var title;
   String url = "https://dept-info.univ-fcomte.fr/joomla/images/CR0700/Quizzs.xml";
-  Xml2Json xml2json = new Xml2Json();
+  Xml2Json xml2json = Xml2Json();
 
   Accueil({Key? key, required this.title}) : super(key: key);
 
@@ -26,11 +26,13 @@ class Accueil extends StatelessWidget{
     var response = await http.post(uri);
     xml2json.parse(response.body);
     var jsonData = xml2json.toGData();
-    var data = json.decode(jsonData);
+    Map<String,dynamic> data = json.decode(jsonData);
 
-    var quizzs = data.get("Quizzs");
+    Map<String,dynamic> quizzs = data["Quizzs"];
 
-    print(data);
+    for(var quiz in quizzs.entries){
+      print(quiz);
+    }
     //print('Response status: ${response.statusCode}');
     //print('Response body: ${response.body}');
   }
@@ -99,16 +101,11 @@ class Accueil extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
               ElevatedButton(onPressed: () => {jouer(context)}, child: Text("Jouer")),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ElevatedButton(onPressed: () => {modifierQuestions(context)}, child: Text("Modifier les Quizzes")),
-                    ElevatedButton(onPressed: () => {popUpDownload(context)}, child: Text("Télécharger"))
+              ElevatedButton(onPressed: () => {modifierQuestions(context)}, child: Text("Modifier les Quizzes")),
+              ElevatedButton(onPressed: () => {popUpDownload(context)}, child: Text("Télécharger"))
                   ]
               )
-            ]
-        )
-      ),
+      )
     );
   }
 }
