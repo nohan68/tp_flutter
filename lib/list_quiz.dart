@@ -112,10 +112,13 @@ class _SelectState extends State<ListQuiz> {
     );
   }
 
-  ajouter(String nouveauTitre) {
-    Quiz nouveauQuiz = new Quiz(Quiz.quizzes.length, nouveauTitre);
+  ajouter(String nouveauTitre)async {
+    int? res = await Quiz.quizzDBHelper.ajouterQuizz(nouveauTitre);
+    Quiz nouveauQuiz = Quiz(res!, nouveauTitre);
+
     setState(() {
       Quiz.add(nouveauQuiz);
+      Quiz.refresh();
     });
     Quiz.quizActuel = Quiz.quizzes.length-1;
     Navigator.pop(context, 'OK');
@@ -123,14 +126,14 @@ class _SelectState extends State<ListQuiz> {
       context,
       MaterialPageRoute(builder: (context) =>  ListQuestion(title: "", quiz: Quiz.get(Quiz.quizzes.length-1))),
     );
-
-
   }
 
-  delete(DismissDirection d, int index) {
+  delete(DismissDirection d, int index) async {
     if(d ==  DismissDirection.endToStart){
+      await Quiz.quizzDBHelper.supprimerQuizz(Quiz.quizzes[index].idQuizz);
       setState(() {
         Quiz.quizzes.removeAt(index);
+        Quiz.refresh();
       });
     }
 
