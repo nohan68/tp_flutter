@@ -1,10 +1,16 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tp_flutter_jaugey_nohan/list_quiz.dart';
 import 'package:tp_flutter_jaugey_nohan/select.dart';
+import 'package:xml2json/xml2json.dart';
+import 'package:http/http.dart' as http;
 
 class Accueil extends StatelessWidget{
   var title;
+  String url = "https://dept-info.univ-fcomte.fr/joomla/images/CR0700/Quizzs.xml";
+  Xml2Json xml2json = new Xml2Json();
 
   Accueil({Key? key, required this.title}) : super(key: key);
 
@@ -15,9 +21,65 @@ class Accueil extends StatelessWidget{
     );
   }
 
-  void telecharger(BuildContext context){
+  void telecharger(BuildContext context, String url) async{
+    var uri = Uri.parse(url);
+    var response = await http.post(uri);
+    xml2json.parse(response.body);
+    var jsonData = xml2json.toGData();
+    var data = json.decode(jsonData);
 
+    var quizzs = data.get("Quizzs");
+
+    print(data);
+    //print('Response status: ${response.statusCode}');
+    //print('Response body: ${response.body}');
   }
+
+  void popUpDownload(BuildContext context){
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Téléchargement'),
+        actions: <Widget>[
+          Column(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Entrez l'url de téléchargement",
+                    ),
+                    onChanged: (String s)=>{
+                      url = s
+                    },
+                    initialValue: "https://dept-info.univ-fcomte.fr/joomla/images/CR0700/Quizzs.xml",
+                  )
+              ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.pop(context, 'Cancel')
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => {
+                      telecharger(context, url)
+                    },
+                    child: const Text('Ajouter'),
+                  ),
+                ],
+              )
+            ],
+          )
+
+        ],
+      ),
+    );
+  }
+
 
   void modifierQuestions(BuildContext context){
     Navigator.push(
@@ -41,7 +103,7 @@ class Accueil extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ElevatedButton(onPressed: () => {modifierQuestions(context)}, child: Text("Modifier les Quizzes")),
-                    ElevatedButton(onPressed: () => {telecharger(context)}, child: Text("Télécharger"))
+                    ElevatedButton(onPressed: () => {popUpDownload(context)}, child: Text("Télécharger"))
                   ]
               )
             ]
