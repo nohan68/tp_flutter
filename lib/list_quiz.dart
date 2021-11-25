@@ -142,7 +142,7 @@ class _SelectState extends State<ListQuiz> {
           context: context,
           builder: (BuildContext context) =>
               AlertDialog(
-                title: const Text('Editer la question'),
+                title: const Text('Editer le quiz'),
                 actions: <Widget>[
                   Column(
                     children: [

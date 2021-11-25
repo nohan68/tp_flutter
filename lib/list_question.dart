@@ -173,16 +173,14 @@ class _SelectState extends State<ListQuestion> {
     );
   }
 
-  void changeOrdre(int oldIndex, int newIndex) async{
+  void changeOrdre(int oldIndex, int newIndex){
     int indexOld=oldIndex+1;
     int indexNew=newIndex;
-    print("inital index : $oldIndex $newIndex");
     if(oldIndex>newIndex){
       indexNew+=1;
     }
 
-    print("indexes : $indexOld $indexNew");
-    await Quiz.quizzDBHelper.changeIndexQuestion(widget.quiz.idQuizz,indexOld, indexNew);
+    Quiz.quizzDBHelper.changeIndexQuestion(widget.quiz.idQuizz,indexOld, indexNew);
     Question q = widget.quiz.questions[indexOld-1];
     widget.quiz.questions.removeAt(indexOld-1);
     widget.quiz.questions.insert(indexNew-1, q);

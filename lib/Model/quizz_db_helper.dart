@@ -122,7 +122,7 @@ class QuizzDBHelper {
   Future close() async => _db?.close();
 
   Future<Quiz> getQuizz(int id) async{
-    print("Quizz build : $id");
+    //print("Quizz build : $id");
     Database? db = await instance.db ;
     List<Map>? maps = await db?.rawQuery ('''SELECT $colonneQuestion_index, $colonneQuizz_Name, $colonneQuestion_ID,$colonneQuestion_reponse,
                                               $colonneQuestion_question,$colonneReponse_Reponse,$colonneReponse_Index
@@ -145,7 +145,7 @@ class QuizzDBHelper {
 
           for (Map map in maps) {
             if(lastQuestionid!=map[colonneQuestion_ID]){
-              print("Question :$lastQuestion $lastIndex $lastQuestionid");
+              //print("Question :$lastQuestion $lastIndex $lastQuestionid");
               res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
               lastQuestionid = map[colonneQuestion_ID];
               lastReponse = map[colonneQuestion_reponse];
@@ -157,7 +157,7 @@ class QuizzDBHelper {
               tmp.add(Reponse(map[colonneReponse_Reponse].toString(),lastReponse==map[colonneReponse_Index],map[colonneReponse_Index],lastQuestionid));
             }
           }
-          print("Question :$lastQuestion $lastIndex $lastQuestionid");
+          //print("Question :$lastQuestion $lastIndex $lastQuestionid");
           res.questions.add(Question(lastQuestion,tmp,lastQuestionid));
         }
       }
