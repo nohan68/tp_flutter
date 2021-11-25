@@ -114,7 +114,7 @@ class _SelectState extends State<ListQuiz> {
 
   ajouter(String nouveauTitre)async {
     int? res = await Quiz.quizzDBHelper.ajouterQuizz(nouveauTitre);
-    Quiz nouveauQuiz = Quiz(res!, nouveauTitre);
+    Quiz nouveauQuiz = Quiz(res, nouveauTitre);
 
     setState(() {
       Quiz.add(nouveauQuiz);

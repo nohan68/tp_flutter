@@ -7,6 +7,8 @@ import 'package:tp_flutter_jaugey_nohan/select.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
 
+import 'Model/quiz.dart';
+
 class Accueil extends StatelessWidget{
   var title;
   String url = "https://dept-info.univ-fcomte.fr/joomla/images/CR0700/Quizzs.xml";
@@ -21,17 +23,46 @@ class Accueil extends StatelessWidget{
     );
   }
 
+  String myTrim(String str){
+    String res= str.replaceAll(RegExp(r'(\\t|\\n)+'), '');
+    res= res.replaceAll('\\', '');
+    res=res.trim();
+    return res;
+  }
+
   void telecharger(BuildContext context, String url) async{
     var uri = Uri.parse(url);
     var response = await http.post(uri);
-    xml2json.parse(response.body);
+    String s = const Utf8Codec().decode(response.bodyBytes);
+    xml2json.parse(s);
     var jsonData = xml2json.toGData();
     Map<String,dynamic> data = json.decode(jsonData);
 
     Map<String,dynamic> quizzs = data["Quizzs"];
 
-    for(var quiz in quizzs.entries){
-      print(quiz);
+    for(MapEntry quiz in quizzs.entries){
+      List list = quiz.value;
+      for(Map iter in list){
+        String quizName = iter['type'];
+        int idQuizz = await Quiz.quizzDBHelper.ajouterQuizz(quizName);
+
+        List question = iter['Question'];
+        for(Map item in question){
+          String questionText = myTrim(item['\$t'].trim());
+          int indexReponse = int.parse(item['Reponse']['valeur'][0]);
+
+          int idQuestion = await Quiz.quizzDBHelper.ajouterQuestion(idQuizz, questionText,indexReponse: indexReponse);
+          List reponses = item['Propositions']['Proposition'];
+          for(Map reponse in reponses){
+            String rep = myTrim(reponse['\$t'].trim());
+            await Quiz.quizzDBHelper.ajouterReponseQuestion(idQuestion, rep);
+          }
+        }
+
+        print("\n++++++++++++++++++++++++\n");
+      }
+      print("\n--------------------------\n");
+      Quiz.refresh();
     }
     //print('Response status: ${response.statusCode}');
     //print('Response body: ${response.body}');

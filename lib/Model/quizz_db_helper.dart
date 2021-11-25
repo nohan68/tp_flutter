@@ -228,7 +228,8 @@ class QuizzDBHelper {
     }
   }
 
-  Future <int> ajouterQuestion(int idQuizz, String text) async{
+  Future <int> ajouterQuestion(int idQuizz, String text,{indexReponse=1}) async{
+    print("Ajouter question "+text);
     Database? db = await instance.db ;
 
     List<Map>? maps = await db?.rawQuery("SELECT MAX($colonneQuestion_index) AS max FROM $tableQuestions WHERE $colonneQuestion_quizz=$idQuizz");
@@ -238,9 +239,9 @@ class QuizzDBHelper {
         if(maps[0]['max']!=null){
           index = maps[0]['max']+1;
         }
-        return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:index,colonneQuestion_reponse:1});
+        return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:index,colonneQuestion_reponse:indexReponse});
       }
-      return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:1,colonneQuestion_reponse:1});
+      return await db!.insert(tableQuestions,{colonneQuestion_question:text,colonneQuestion_quizz:idQuizz,colonneQuestion_index:1,colonneQuestion_reponse:indexReponse});
     }
     throw Exception("Insertion impossible");
   }
@@ -270,12 +271,13 @@ class QuizzDBHelper {
     }
   }
 
-  Future<int?> ajouterQuizz(String nom)async{
+  Future<int> ajouterQuizz(String nom)async{
+    print("Ajouter quizz "+nom);
     Database? db = await instance.db;
     int? res=await db?.insert(tableQuizz, {
       colonneQuizz_Name: nom
     });
-    return res;
+    return res!;
   }
 
   Future<void> changerNonQuizz(int quizzId,String nom) async{
