@@ -42,6 +42,7 @@ class _JeuState extends State<Jeu> {
 
   void finish(){
     Question.questionActuelle = 0;
+    Navigator.pop(context, "quiz");
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) =>  Resultat(bonneReponses, mauvaisesReponses)),

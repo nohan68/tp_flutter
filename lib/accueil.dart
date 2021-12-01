@@ -6,6 +6,7 @@ import 'package:tp_flutter_jaugey_nohan/list_quiz.dart';
 import 'package:tp_flutter_jaugey_nohan/select.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'Model/quiz.dart';
 
@@ -31,6 +32,16 @@ class Accueil extends StatelessWidget{
   }
 
   void telecharger(BuildContext context, String url) async{
+    Navigator.pop(context, 'Cancel');
+    Fluttertoast.showToast(
+        msg: "Téléchargement",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
     var uri = Uri.parse(url);
     var response = await http.post(uri);
     String s = const Utf8Codec().decode(response.bodyBytes);
@@ -63,6 +74,16 @@ class Accueil extends StatelessWidget{
       }
       print("\n--------------------------\n");
       Quiz.refresh();
+
+      Fluttertoast.showToast(
+          msg: "Quiz(s) téléchargé(s)",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
     }
     //print('Response status: ${response.statusCode}');
     //print('Response body: ${response.body}');
