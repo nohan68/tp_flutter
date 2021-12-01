@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.nohan.tp_flutter_jaugey_nohan">
    <application
-        android:label="tp_flutter_jaugey_nohan"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Quizz"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -64,7 +64,7 @@ class _JeuState extends State<Jeu> {
   List<Widget> getReponsesButton(){
     List<ElevatedButton> btns = [];
     for(Reponse r in Question.getActuelle().reponses){
-      btns.add( ElevatedButton(onPressed: () => { answer(r) }, child: Text(r.libelle)));
+      btns.add( ElevatedButton(onPressed: () => { answer(r) }, child: Text(r.libelle,textScaleFactor:1.3)));
     }
     return btns;
   }
@@ -74,25 +74,30 @@ class _JeuState extends State<Jeu> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Container(
-            child:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text( Question.getActuelle().question),
-                Row(
+        body: Padding(
+        padding: const EdgeInsets.all(50.0),
+          child: Container(
+            alignment: Alignment.center,
+              child:
+              Expanded(
+              child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: getReponsesButton(),
-                ),
-                ElevatedButton(
-                  onPressed: suivant,
-                  child: const Text('Suivant'),
-                ),
-              ],
-            )
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text( Question.getActuelle().question,
+                  textScaleFactor:1.5),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: getReponsesButton(),
+                  ),
+                  ElevatedButton(
+                    onPressed: suivant,
+                    child: const Text('Suivant',textScaleFactor:1.3),
+                  ),
+                ],
+              )
+              )
+          )
         )
     );
   }

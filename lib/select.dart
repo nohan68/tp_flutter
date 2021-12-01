@@ -41,9 +41,6 @@ class _SelectState extends State<Select> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
         body: ListView.builder(
                   // Let the ListView know how many items it needs to build.
                   itemCount: Quiz.quizzes.length,
@@ -54,7 +51,7 @@ class _SelectState extends State<Select> {
 
                     return ListTile(
                       title: Text(item.nomQuizz),
-                      subtitle: Text("$index"),
+                      subtitle: Text("Nombre de questions : ${item.questions.length}"),
                       onTap: () => { select(index) },
                     );
                   },

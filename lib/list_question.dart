@@ -74,9 +74,6 @@ class _SelectState extends State<ListQuestion> {
   Widget build(BuildContext context) {
     print("build");
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: ReorderableListView.builder(
         // Let the ListView know how many items it needs to build.
         itemCount: widget.quiz.questions.length,

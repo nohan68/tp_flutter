@@ -103,9 +103,6 @@ class EditQuestionState extends State<EditQuestion>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Column(
           children: [
             Padding(

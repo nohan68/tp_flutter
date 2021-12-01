@@ -9,9 +9,6 @@ class Resultat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Résultats")
-      ),
       body: Center(
         child: Column(
           children: [
