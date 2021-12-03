@@ -9,14 +9,34 @@ class Resultat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Text("${this.bonneReponses} bonnes réponses"),
-            Text("${this.mauvaisesReponses} mauvaises réponses")
-          ],
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Container(
+        alignment: Alignment.center,
+        child:
+        Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("$bonneReponses bonnes réponses",style:const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ).apply(
+                    color: Colors.white,
+                  )),
+                  Text("$mauvaisesReponses mauvaises réponses",style:const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ).apply(
+                    color: Colors.white,
+                  ))
+                ],
+              )
+            )
         )
-      )
+        )
     );
   }
 }

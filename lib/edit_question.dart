@@ -103,13 +103,25 @@ class EditQuestionState extends State<EditQuestion>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+
       body: Column(
           children: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 50),
                 child: TextFormField(
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ).apply(
+                    color: Colors.white,
+                  ),
+
+
                   decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 1.0),
+                    ),
                     hintText: widget.question.question,
                   ),
                   initialValue: widget.question.question,
@@ -130,10 +142,29 @@ class EditQuestionState extends State<EditQuestion>{
                 itemBuilder: (context, index) {
                   final Reponse item = widget.question.reponses[index];
                   return Dismissible(
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: AlignmentDirectional.centerEnd,
+                        color: Colors.red,
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                          child: Icon(Icons.delete,
+                            color: Colors.white,
+
+                          ),
+
+
+                        ),
+                      ),
                       key: Key(item.libelle),
                       child: RadioListTile(
-                        title: Text(item.libelle),
-                        subtitle: Text(item.veracite ? "Vrai" : "Faux"),
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(item.libelle,
+                            style:const TextStyle(
+                              fontSize: 20,
+                            ).apply(
+                              color: Colors.white,
+                            )),
                         onChanged: (value) {
                           changeVeracite(index);
                         },
@@ -147,7 +178,14 @@ class EditQuestionState extends State<EditQuestion>{
                 },
               ),
             ),
-            ElevatedButton(onPressed: valider, child: const Text("Valider")),
+            ElevatedButton(onPressed: valider, child: const Text("Valider"),
+              style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  textStyle:const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold)
+              ),),
           ]
       ),
       floatingActionButton: FloatingActionButton(

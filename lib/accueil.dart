@@ -145,13 +145,51 @@ class Accueil extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-              ElevatedButton(onPressed: () => {jouer(context)}, child: Text("Jouer")),
-              ElevatedButton(onPressed: () => {modifierQuestions(context)}, child: Text("Modifier les Quizzes")),
-              ElevatedButton(onPressed: () => {popUpDownload(context)}, child: Text("Télécharger"))
+              Padding(
+              padding: const EdgeInsets.all(20),
+                    child:ElevatedButton(
+                      onPressed: () => {jouer(context)}, child: const Text("Jouer"),
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          textStyle:const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold)
+                          ),
+                    ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(20),
+                    child:ElevatedButton(
+                        onPressed: () => {modifierQuestions(context)}, child: const Text("Modifier les Quizs"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          textStyle:const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold)
+
+                      ),
+                    ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(20),
+                    child:ElevatedButton(
+                        onPressed: () => {popUpDownload(context)}, child: const Text("Télécharger"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          textStyle:const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold)
+                      ),
+                    )
+              ),
                   ]
               )
       )

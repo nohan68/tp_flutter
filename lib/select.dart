@@ -41,17 +41,33 @@ class _SelectState extends State<Select> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        body: ListView.builder(
+      backgroundColor: Theme.of(context).backgroundColor,
+
+      body: ListView.builder(
                   // Let the ListView know how many items it needs to build.
                   itemCount: Quiz.quizzes.length,
+
                   // Provide a builder function. This is where the magic happens.
                   // Convert each item into a widget based on the type of item it is.
                   itemBuilder: (context, index) {
                     final item = Quiz.get(index);
 
                     return ListTile(
-                      title: Text(item.nomQuizz),
-                      subtitle: Text("Nombre de questions : ${item.questions.length}"),
+                      title: Text(item.nomQuizz,
+                          style:const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ).apply(
+                            color: Colors.white,
+                          )),
+                      subtitle: Text("Nombre de questions : ${item.questions.length}",
+                      style:const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                      ).apply(
+                        color: Theme.of(context).colorScheme.secondary,
+                      )
+                    ),
                       onTap: () => { select(index) },
                     );
                   },

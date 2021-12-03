@@ -64,7 +64,14 @@ class _JeuState extends State<Jeu> {
   List<Widget> getReponsesButton(){
     List<ElevatedButton> btns = [];
     for(Reponse r in Question.getActuelle().reponses){
-      btns.add( ElevatedButton(onPressed: () => { answer(r) }, child: Text(r.libelle,textScaleFactor:1.3)));
+      btns.add( ElevatedButton(onPressed: () => { answer(r) }, child: Text(r.libelle,textScaleFactor:1.3),
+        style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            textStyle:const TextStyle(
+                fontSize: 20,
+                )
+        ),));
     }
     return btns;
   }
@@ -74,6 +81,8 @@ class _JeuState extends State<Jeu> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+
         body: Padding(
         padding: const EdgeInsets.all(50.0),
           child: Container(
@@ -85,7 +94,12 @@ class _JeuState extends State<Jeu> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text( Question.getActuelle().question,
-                  textScaleFactor:1.5),
+                      style:const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ).apply(
+                        color: Colors.white,
+                      )),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: getReponsesButton(),
@@ -93,6 +107,13 @@ class _JeuState extends State<Jeu> {
                   ElevatedButton(
                     onPressed: suivant,
                     child: const Text('Suivant',textScaleFactor:1.3),
+                    style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                        textStyle:const TextStyle(
+                          fontSize: 20,
+                        )
+                    ),
                   ),
                 ],
               )

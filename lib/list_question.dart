@@ -74,6 +74,8 @@ class _SelectState extends State<ListQuestion> {
   Widget build(BuildContext context) {
     print("build");
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+
       body: ReorderableListView.builder(
         // Let the ListView know how many items it needs to build.
         itemCount: widget.quiz.questions.length,
@@ -82,13 +84,40 @@ class _SelectState extends State<ListQuestion> {
         itemBuilder: (context, index) {
           final item = widget.quiz.getQuestion(index);
           return Dismissible(
+            direction: DismissDirection.endToStart,
+            background: Container(
+              alignment: AlignmentDirectional.centerEnd,
+              color: Colors.red,
+              child: const Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                child: Icon(Icons.delete,
+                  color: Colors.white,
+
+                ),
+
+
+              ),
+            ),
               key: Key(item.question),
               child: ListTile(
-                title: Text(item.question),
-                subtitle: Text(item.getBonneReponse().libelle),
-                onTap: () => { select(index) }
+                title:  Text(item.question,
+                    style:const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ).apply(
+                      color: Colors.white,
+                    )),
+                  subtitle: Text("Réponse : ${item.getBonneReponse().libelle}",
+                      style:const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ).apply(
+                        color: Theme.of(context).colorScheme.secondary,
+                      )
+                  ),
+                onTap: () => { select(index) },
               ),
-              onDismissed: (d) => {delete(d, index,item.idQuestion)}
+              onDismissed: (d) => {delete(d, index,item.idQuestion)},
           );
         }, onReorder: (int oldIndex, int newIndex) {
           changeOrdre(oldIndex,newIndex);

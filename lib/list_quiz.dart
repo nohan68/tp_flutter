@@ -41,6 +41,8 @@ class _SelectState extends State<ListQuiz> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+
       body: ListView.builder(
         // Let the ListView know how many items it needs to build.
         itemCount: Quiz.quizzes.length,
@@ -49,10 +51,86 @@ class _SelectState extends State<ListQuiz> {
         itemBuilder: (context, index) {
           final item = Quiz.get(index);
           return Dismissible(
+              background: Row(
+                children:[
+                  Expanded(
+                    flex: 5,
+
+                    child:Container(
+                      alignment: Alignment.centerLeft,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            stops: [
+                              0.6,
+                              1,
+                            ],
+                            colors: [
+                              Colors.indigo,
+                              Colors.black,
+                            ],
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                          child: Icon(IconData(0xe3f2, fontFamily: 'MaterialIcons'),
+                            color: Colors.white,
+
+                          ),
+
+
+                        ),
+                      ),
+                  ),
+              Expanded(
+                  flex: 5,
+                child:Container(
+                  alignment: Alignment.centerRight,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerRight,
+                      end: Alignment.centerLeft,
+                      stops: [
+                        0.6,
+                        1,
+                      ],
+                      colors: [
+                        Colors.red,
+                        Colors.black,
+                      ],
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                    child: Icon(Icons.delete,
+                      color: Colors.white,
+
+                    ),
+
+
+                  ),
+                ),
+              ),
+              ]
+              ),
               key: Key(item.nomQuizz),
               child: ListTile(
-                  title: Text(item.nomQuizz),
-                  subtitle: Text("Nombre de questions : ${item.questions.length}"),
+                  title:  Text(item.nomQuizz,
+                      style:const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ).apply(
+                        color: Colors.white,
+                      )),
+                  subtitle: Text("Nombre de questions : ${item.questions.length}",
+                      style:const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ).apply(
+                        color: Theme.of(context).colorScheme.secondary,
+                      )
+                  ),
                   onTap: () => { select(index) }
               ),
               onDismissed: (d) => {delete(d, index)}
